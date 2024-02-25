@@ -18,6 +18,10 @@ public class AccionSeguirPersonaje : IAAccion
             return;
         }
 
+        // Mirar hacia el personaje
+        controller.transform.LookAt(controller.PersonajeReferencia.transform.position);
+
+        // Calcular distancia hacia el personaje
         Vector3 direccionHaciaPersonaje = controller.PersonajeReferencia.transform.position - controller.transform.position;
         Vector3 direccion = direccionHaciaPersonaje.normalized;
         float distanciaDelPersonaje = direccionHaciaPersonaje.magnitude;

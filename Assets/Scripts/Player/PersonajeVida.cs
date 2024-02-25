@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -13,11 +10,11 @@ public class PersonajeVida : VidaBase
     public bool PuedeSerCurado => Salud < saludMax && !Derrotado;
     
     //private Personaje personaje;
-    private BoxCollider2D _boxCillider2D;
+    private Collider _collider;
 
     private void Awake() 
     {
-        _boxCillider2D = GetComponent<BoxCollider2D>();
+        _collider = GetComponent<Collider>();
         //personaje = GetComponent<Personaje>();
     }
 
@@ -29,7 +26,7 @@ public class PersonajeVida : VidaBase
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        /*if (Input.GetKeyDown(KeyCode.T))
         {
             RecibirDaño(10);
         }
@@ -38,6 +35,7 @@ public class PersonajeVida : VidaBase
         {
             RestaurarSalud(10);
         }
+        */
     }
 
     public void RestaurarSalud(float cantidad)
@@ -62,7 +60,7 @@ public class PersonajeVida : VidaBase
     protected override void PersonajeDerrotado()
     {
         //personaje.PersonajeMovimiento.enabled = false;
-        _boxCillider2D.enabled = false;
+        _collider.enabled = false;
         Derrotado = true;
         //Si el EventoPerosnajeDerrotado != nulo lo invoca
         EventoPersonajeDerrotado?.Invoke();
@@ -72,7 +70,7 @@ public class PersonajeVida : VidaBase
     public void RestaurarPersoanje()
     {
         //personaje.PersonajeMovimiento.enabled = true;
-        _boxCillider2D.enabled = true;
+        _collider.enabled = true;
         Derrotado = false;
         Salud = saludInicial;
         ActualizarBarraVida(Salud, saludInicial);

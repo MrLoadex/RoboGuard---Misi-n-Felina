@@ -11,6 +11,9 @@ public class UIManager : Singleton<UIManager>
     [Header("Texto")]
     [SerializeField] private TextMeshProUGUI vidaTMP;
 
+    [Header("Paneles")]
+    [SerializeField] private GameObject panelDerrota;
+
     private float vidaActual;
     private float vidaMax;
 
@@ -32,5 +35,24 @@ public class UIManager : Singleton<UIManager>
         vidaActual = pVidaActual;
         vidaMax = pVidaMax; 
     }
+
+    #region Eventos
+
+    private void ResponderEventoPersonajeDerrotado()
+    {
+        panelDerrota.SetActive(true);
+    }
+
+    private void OnEnable() 
+    {
+        PersonajeVida.EventoPersonajeDerrotado += ResponderEventoPersonajeDerrotado;
+    }
+
+    private void OnDisable() 
+    {
+        PersonajeVida.EventoPersonajeDerrotado -= ResponderEventoPersonajeDerrotado;
+    }
+
+    #endregion
 }
 

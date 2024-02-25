@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public enum TiposDeAtaque
 {
@@ -31,6 +32,11 @@ public class IAController : MonoBehaviour
     [SerializeField] float daño;
     [SerializeField] float tiempoEntereAtaques;
     [SerializeField] TiposDeAtaque tipoAtaque;
+
+    [Header("Flechas")]
+    [SerializeField] float arrowVelocidad = 30;
+    [SerializeField] GameObject arrow;
+    [SerializeField] ObjectPooler arrowPool;
     
     [Header("Debug")]
     [SerializeField]private bool mostrarDeteccion;
@@ -51,9 +57,15 @@ public class IAController : MonoBehaviour
 
     private void Start() 
     {   
+        // Obtener componentes
         _boxCollider = GetComponent<BoxCollider>();
-        EstadoActual = estadoInicial;
         EnemigoMovimiento = GetComponent<EnemigoMovimiento>();
+        
+        // Inicializar Estado
+        EstadoActual = estadoInicial;
+
+        // Crear Pooler
+        arrowPool.CrearPooler(arrow);
     }
 
     private void Update() 
@@ -78,6 +90,29 @@ public class IAController : MonoBehaviour
         }
 
         AplicarDañoAlPersonaje(cantidad);
+    }
+
+    public void AtaqueDistancia(float cantidad)
+    {
+        if (PersonajeReferencia == null)
+        {
+            return;
+        }
+
+        //Instanciar flecha
+        GameObject arrowGO = arrowPool.ObtenerInstancia();
+        //Posicionar Flecha
+        arrowGO.transform.position = transform.position;
+        //Obtener compoenente arrow
+        Arrow arrow = arrowGO.GetComponent<Arrow>();
+        //Setear daño
+        arrow.damage = (int)daño;
+        //Setear Direccion
+        arrow.objetivo = personaje.transform.position;
+        // Setear Velocidad
+        arrow.velocidad = arrowVelocidad;
+        // Activar Flecha
+        arrowGO.SetActive(true);
     }
 
     public void AplicarDañoAlPersonaje(float cantidad)

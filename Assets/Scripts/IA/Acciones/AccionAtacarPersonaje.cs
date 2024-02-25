@@ -19,15 +19,22 @@ public class AccionAtacarPersonaje : IAAccion
 
         if (!controller.EsTiempoDeAtacar())
         {
+            // Mirar hacia el personaje
+            controller.transform.LookAt(controller.PersonajeReferencia.transform.position);
+                
             return;
         }
 
         if (controller.PersonajeEnRangoDeAtaque(controller.RangoDeAtaqueDeterminado))
         {
-                //Atacar al enemigo (Player)
+            //Atacar al enemigo (Player)
             if (controller.TipoAtaque == TiposDeAtaque.Distancia)
             {
-                // Atacar a distancia
+                // Mirar hacia el personaje
+                controller.transform.LookAt(controller.PersonajeReferencia.transform.position);
+
+                //Atacar
+                controller.AtaqueDistancia(controller.Daño);
             }
             else
             {
