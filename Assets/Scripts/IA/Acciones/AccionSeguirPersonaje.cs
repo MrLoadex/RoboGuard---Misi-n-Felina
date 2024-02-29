@@ -26,7 +26,7 @@ public class AccionSeguirPersonaje : IAAccion
         Vector3 direccion = direccionHaciaPersonaje.normalized;
         float distanciaDelPersonaje = direccionHaciaPersonaje.magnitude;
 
-        if (distanciaDelPersonaje >= 1.15f)
+        if (distanciaDelPersonaje >= 1.5f)
         {
             controller.transform.Translate(direccion * controller.VelocidadMovimiento * Time.deltaTime);
         }

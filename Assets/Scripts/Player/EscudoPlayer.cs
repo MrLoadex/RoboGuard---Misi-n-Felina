@@ -5,25 +5,25 @@ using Unity.Mathematics;
 using UnityEditor.Rendering.Universal;
 using UnityEngine;
 
-public class Escudo : MonoBehaviour
+public class EscudoPlayer : MonoBehaviour
 {
     [SerializeField] Transform player;
     public Transform Player => player;
 
     [SerializeField] float escudoMax = 100;
 
-    [SerializeField] float tiempoAntesDeRegenerar = 2;
+    [SerializeField] float tiempoAntesDeRegenerar = 1.5f;
     [SerializeField] float factorRegeneracion = 5; //Cuanto se cura x segundo
+    
+    [SerializeField] GameObject escudoMeshObj;
+
+    private float escudoActual;
 
     public bool PuedeDefender { get; private set; } = true;
 
     private bool puedeRegenerar = true;
-    private int tiempoParaRegenerar;
+    private string TiempoDeEventoKey = "UltimoGolpe";
     
-    //public static Action EventoEscudoAgotado;
-
-    private float escudoActual;
-
     private void Start() 
     {
         escudoActual = escudoMax;
@@ -31,11 +31,13 @@ public class Escudo : MonoBehaviour
         StartCoroutine(RegenerarEscudoPorSegundo());
     }
 
-    private void Update() {
+    private void Update()
+    {
         UIManager.Instance.ActualizarEscudoPersonaje(escudoActual, escudoMax);
+        ComprobarSiPuedeRegenerar();
     }
 
-    public void Impactar(float cantidadDaño)
+    public void Dañar(float cantidadDaño)
     {
         if(!PuedeDefender)
         {
@@ -47,43 +49,59 @@ public class Escudo : MonoBehaviour
             return;
         }
 
+        // Guarda el tiempo actual en PlayerPrefs
+        PlayerPrefs.SetFloat(TiempoDeEventoKey, Time.time);
+        PlayerPrefs.Save();
+
+        /*Se va a utilizar para saber cuando empezar a regenerar escudo*/
+
         escudoActual -= cantidadDaño;
         
         if (escudoActual <= 0)
         {
-            AgotarEscudo();
+            DesactivarProteccion();
         }
-
     }
 
-    private void AgotarEscudo()
+    private void DesactivarProteccion()
     {
         // Logica del escudo
         escudoActual = 0;
-
         PuedeDefender = false;
-        
-        // Se notifica a la interfaz
+        escudoMeshObj.SetActive(false);
+        //Llamado a la UI
         UIManager.Instance.AgotarEscudo();
 
     }
 
-    private void ActivarEscudo()
+    private void ActivarProteccion()
     {
         PuedeDefender = true;
         escudoActual = escudoMax;
+        escudoMeshObj.SetActive(true);
+        //Llamado a la UI
         UIManager.Instance.ActivarEscudo();
     }
     
-    private bool ComprobarPuedeRegenerar()
+    private void ComprobarSiPuedeRegenerar()
     {
-        //if ();
-        return true;
+        // Obtener el momento guardado
+        float tiempoDesdeUltimoGolpe = PlayerPrefs.GetFloat(TiempoDeEventoKey, 0f);
+        
+        // Comprobar si fue golpeado hace mas de "tiempoAntesDeRegenerar" segundos
+
+        if ( tiempoAntesDeRegenerar < tiempoDesdeUltimoGolpe -Time.time)
+        {
+            puedeRegenerar = false;
+        }
+        else
+        {
+            puedeRegenerar = true;
+        }
     }
 
     private IEnumerator RegenerarEscudoPorSegundo()
     {
-        Debug.Log("Escudo Actual:" + escudoActual);
         if (puedeRegenerar)
         {
             escudoActual += factorRegeneracion / 2;
@@ -91,12 +109,12 @@ public class Escudo : MonoBehaviour
             if (escudoActual >= escudoMax)
             {
                 escudoActual = escudoMax;
+                ActivarProteccion();
             }
-            puedeRegenerar = false;
         }
+
         yield return new WaitForSeconds(0.5f);
 
-        puedeRegenerar = true;
         StartCoroutine(RegenerarEscudoPorSegundo());
     }
 

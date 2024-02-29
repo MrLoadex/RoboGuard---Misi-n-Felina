@@ -51,9 +51,9 @@ public class Arrow : MonoBehaviour
             gameObject.SetActive(false);
     }
 
-    private void DañarEscudo(Escudo escudo)
+    private void DañarEscudo(EscudoPlayer escudo)
     {
-        escudo.Impactar(damage);
+        escudo.Dañar(damage);
     }
 
     private void OnTriggerEnter(Collider other) 
@@ -61,14 +61,14 @@ public class Arrow : MonoBehaviour
         // Verificar si la flecha ha colisionado con un enemigo u otro objeto que pueda recibir daño
         if(other.gameObject.CompareTag("Escudo"))
         {
-            if (!other.GetComponent<Escudo>().PuedeDefender)
+            if (!other.GetComponent<EscudoPlayer>().PuedeDefender)
             {
                 return;
             }
-            Escudo escudo = other.GetComponent<Escudo>();
+            EscudoPlayer escudo = other.GetComponent<EscudoPlayer>();
             DañarEscudo(escudo);
 
-            Transform playerTransform = other.GetComponent<Escudo>()?.Player;
+            Transform playerTransform = other.GetComponent<EscudoPlayer>()?.Player;
             DesviarPorEscudo(playerTransform);
             yaReboto = true;
 

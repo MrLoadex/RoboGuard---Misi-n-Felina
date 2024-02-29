@@ -730,6 +730,7 @@ GameObject:
   - component: {fileID: 7269549063927941157}
   - component: {fileID: 6180938127932255409}
   - component: {fileID: 7688164240009432986}
+  - component: {fileID: 6148762860026574314}
   m_Layer: 0
   m_Name: Escudo - Collider
   m_TagString: Escudo
@@ -824,6 +825,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: c12641108656ab54aa4eab5aac19e6f0, type: 3}
+--- !u!114 &6148762860026574314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3639929368052949588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3bf9fa51ed20b408ceef024cd71b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8997908524709554227}
+  escudoMax: 100
+  tiempoAntesDeRegenerar: 2
+  factorRegeneracion: 10
+  escudoMeshObj: {fileID: 7536826124929653128}
 --- !u!1 &4422602368063387625
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,8 +878,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1637513694335255115}
-  - {fileID: 1734196072690524874}
   - {fileID: 5491452585096311151}
+  - {fileID: 1734196072690524874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7237932374037608765
@@ -1003,7 +1021,7 @@ GameObject:
   - component: {fileID: 8814138841533122248}
   - component: {fileID: 3089139182661446363}
   m_Layer: 0
-  m_Name: Escudo
+  m_Name: Escudo - Maya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

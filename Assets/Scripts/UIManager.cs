@@ -8,6 +8,7 @@ public class UIManager : Singleton<UIManager>
     [Header("Barras")]
     [SerializeField] private Image vidaBarraIMG;
     [SerializeField] private Image escudoBarraIMG;
+    [SerializeField] private Image dashBloqueadoIMG;
 
     [Header("Texto")]
     [SerializeField] private TextMeshProUGUI vidaTMP;
@@ -22,6 +23,10 @@ public class UIManager : Singleton<UIManager>
     private float escudoActual;
     private float escudoMax;
 
+    private float dashActual;
+    private float dashMax;
+
+
     void Update()
     {
         ActualizarUIPersonaje();
@@ -34,7 +39,6 @@ public class UIManager : Singleton<UIManager>
         vidaActual / vidaMax, 10f * Time.deltaTime);
 
         //Barra escudo
-        Debug.Log("Escudo Actual: " + escudoActual + "Escudo max: " + escudoMax);
         escudoBarraIMG.fillAmount = Mathf.Lerp(escudoBarraIMG.fillAmount, 
         escudoActual / escudoMax, 10f * Time.deltaTime);
 
@@ -51,7 +55,6 @@ public class UIManager : Singleton<UIManager>
     {
         escudoActual = pEscudoActual;
         escudoMax = pEscudoMax;
-        Debug.Log("Escudo en" + escudoActual);
     }
 
     private void CambiarColorBarraEscudo(float gamma)
@@ -75,6 +78,11 @@ public class UIManager : Singleton<UIManager>
     {
         //Volver barra al color original
         CambiarColorBarraEscudo(166f);
+    }
+
+    public void ActivarDesactivarDashBloqueado(bool status)
+    {
+        dashBloqueadoIMG.gameObject.SetActive(status);
     }
 
     #region Paneles
