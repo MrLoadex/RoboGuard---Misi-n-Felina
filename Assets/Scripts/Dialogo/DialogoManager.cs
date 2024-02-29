@@ -36,7 +36,7 @@ public class DialogoManager : Singleton<DialogoManager>
 
     private void Update() 
     {
-        if (NPCDisponible == null)
+        if (NPCDisponible == null || !NPCDisponible.enabled)
         {
             return;
         }
@@ -55,6 +55,7 @@ public class DialogoManager : Singleton<DialogoManager>
             {
                 AbrirCerrarPanelDialogo(false);
                 despedidaMostrada = false;
+                EventoFinalizarConversacion?.Invoke(NPCDisponible.Dialogo.Nombre);
                 return;
             }
 
@@ -95,7 +96,6 @@ public class DialogoManager : Singleton<DialogoManager>
         despedidaMostrada = true;
         dialogoComenzado = false;
         personajeMovimiento.enabled = true;
-        EventoFinalizarConversacion?.Invoke(npcNombreTMP.text);
     }
 
     public void AbrirCerrarPanelDialogo(bool estado)

@@ -136,3 +136,4 @@ MonoBehaviour:
   velocidad: 8
   objetivo: {x: 0, y: 0, z: 1}
   damage: 10
+  tiempoMaximoDeVida: 3

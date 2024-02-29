@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class Arrow : MonoBehaviour
     public float velocidad = 10f;  // Velocidad de la flecha
     public Vector3 objetivo = Vector3.forward;  // Punto en el espacio al que apuntará la flecha
     public int damage = 10;  // Daño de la flecha
+
+    [SerializeField] private float tiempoMaximoDeVida = 3f;
 
     private bool playerInvulnerable;
     private bool yaReboto;
@@ -48,13 +51,31 @@ public class Arrow : MonoBehaviour
             gameObject.SetActive(false);
     }
 
+    private void DañarEscudo(Escudo escudo)
+    {
+        escudo.Impactar(damage);
+    }
+
     private void OnTriggerEnter(Collider other) 
     {
         // Verificar si la flecha ha colisionado con un enemigo u otro objeto que pueda recibir daño
-        // Puedes personalizar esta parte según tus necesidades y jerarquía de GameObjects.
-        if(other.gameObject.CompareTag("Escudo") || other.gameObject.CompareTag("Obstacle"))
+        if(other.gameObject.CompareTag("Escudo"))
         {
-            DesviarFlecha(other);
+            if (!other.GetComponent<Escudo>().PuedeDefender)
+            {
+                return;
+            }
+            Escudo escudo = other.GetComponent<Escudo>();
+            DañarEscudo(escudo);
+
+            Transform playerTransform = other.GetComponent<Escudo>()?.Player;
+            DesviarPorEscudo(playerTransform);
+            yaReboto = true;
+
+        }
+        else if (other.gameObject.CompareTag("Obstacle"))
+        {
+            DesviarPorObstaculo(other);
         }
         else if (other.gameObject.CompareTag("Player") && !playerInvulnerable)
         {
@@ -70,14 +91,39 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    private void DesviarFlecha(Collider other) 
+    private void DesviarPorEscudo(Transform player)
     {
-        if (!other.gameObject.CompareTag("Escudo") && !other.gameObject.CompareTag("Obstacle"))
+        //Se vuelve invulnerable al player para evitar dañ por bug
+        StartCoroutine(HacerInvulAlPlayer());
+
+        // Obtener la dirección en la que el jugador está apuntando
+        Vector3 direccionJugador = player.forward;
+
+        // Asegurarse de que la dirección no tenga componente vertical
+        direccionJugador.y = 0f;
+        direccionJugador.Normalize();
+
+        // Asignar la nueva dirección a la Rigidbody de la flecha
+        GetComponent<Rigidbody>().velocity = direccionJugador * velocidad;
+
+        // Asegurarse de que la flecha siempre esté mirando hacia la dirección de movimiento
+        if (direccionJugador != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direccionJugador);
+
+            // Solucionar Error del modelo: Rotar la flecha -90 en x
+            Vector3 rotacionActual = transform.rotation.eulerAngles;
+            rotacionActual.x += -90f;
+            transform.rotation = Quaternion.Euler(rotacionActual);
+        }
+    }
+
+    private void DesviarPorObstaculo(Collider other) 
+    {
+        if (!other.gameObject.CompareTag("Obstacle"))
         {
             return;
         }
-        
-        StartCoroutine(HacerInvulAlPlayer());
 
         // Obtener la normal de la superficie del collider del escudo
         Vector3 normalDelEscudo = (other.transform.position - transform.position).normalized;
@@ -96,7 +142,6 @@ public class Arrow : MonoBehaviour
             velocidadReflejada.y = 90f;
             transform.rotation = Quaternion.LookRotation(velocidadReflejada);
         }
-        yaReboto = true;
     }
 
     private IEnumerator HacerInvulAlPlayer()
@@ -108,7 +153,7 @@ public class Arrow : MonoBehaviour
 
     private IEnumerator DesactivarLuegoDeTiempoMaximo()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(tiempoMaximoDeVida);
         gameObject.SetActive(false);   
     }
 }

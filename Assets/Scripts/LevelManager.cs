@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private PersonajeVida playerVida;
 
     [SerializeField] private LevelSettings levelSettings;
 
+
+    public PersonajeVida PersonajeVida => playerVida;
     public LevelSettings LevelSettings => levelSettings;
 
     // Start is called before the first frame update
@@ -20,13 +22,30 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PauseOrPlay();
+        }
+    }
+
+    public void PauseOrPlay()
+    {
+        if (Time.timeScale == 1f)
+        {
+            Time.timeScale = 0f;
+            UIManager.Instance.AbrirCerrarPanelPausa(true);
+        }
+        else if (Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+            UIManager.Instance.AbrirCerrarPanelPausa(false);
+        }
     }
 
     public void Restart()
     {
-        //Sino carga la escena 0
-        SceneManager.LoadScene(0);
+        //Sino carga la escena desde 0
+        SceneManager.LoadScene(levelSettings.levelName);
         //Sacar el juego de pausa
         Time.timeScale = 1f;
     }
@@ -38,7 +57,7 @@ public class LevelManager : MonoBehaviour
         {   
             //Tp player al ultimo punto
             Vector3 posicionObjetivo = levelSettings.LastSavePint.gameObject.transform.position;
-            posicionObjetivo.y = 0;
+            //posicionObjetivo.y = 0;
             playerVida.gameObject.transform.position = posicionObjetivo;
 
             //Resetea estadisticas

@@ -5340,7 +5340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca77f395c0a8a640ae803d3ff13931c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personaje: {fileID: 0}
+  personaje: {fileID: 7407575789642658120, guid: 892c0f15533e8fc41ad25a9fba9903f9, type: 3}
   estadoInicial: {fileID: 11400000, guid: 9774063f1557c7543a9c991c9e7e833d, type: 2}
   estadoDefault: {fileID: 11400000, guid: 4ea76f5d880da3b428f6c2cc2cc1144a, type: 2}
   rangoDeteccion: 12.39

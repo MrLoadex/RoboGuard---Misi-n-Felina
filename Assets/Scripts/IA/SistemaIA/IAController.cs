@@ -15,7 +15,7 @@ public class IAController : MonoBehaviour
     public static Action<float> EventoHacerDaño;
 
     [Header("Stats")]
-    [SerializeField] PersonajeVida personaje;
+    PersonajeVida personajeVida;
 
     [Header("Estados")]
     [SerializeField] private IAEstado estadoInicial;
@@ -58,6 +58,7 @@ public class IAController : MonoBehaviour
     private void Start() 
     {   
         // Obtener componentes
+        personajeVida = LevelManager.Instance.PersonajeVida;
         _boxCollider = GetComponent<BoxCollider>();
         EnemigoMovimiento = GetComponent<EnemigoMovimiento>();
         
@@ -108,7 +109,7 @@ public class IAController : MonoBehaviour
         //Setear daño
         arrow.damage = (int)daño;
         //Setear Direccion
-        arrow.objetivo = personaje.transform.position;
+        arrow.objetivo = personajeVida.transform.position;
         // Setear Velocidad
         arrow.velocidad = arrowVelocidad;
         // Activar Flecha
