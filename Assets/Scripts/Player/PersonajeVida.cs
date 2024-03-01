@@ -9,12 +9,17 @@ public class PersonajeVida : VidaBase
     public bool Derrotado { get; private set; }
     public bool PuedeSerCurado => Salud < saludMax && !Derrotado;
     
+    [Header("Sonido")]
+    [SerializeField] private AudioClip audioRecibirDaño;
+
     //private Personaje personaje;
     private Collider _collider;
+    private AudioSource _audioSourse;
 
     private void Awake() 
     {
         _collider = GetComponent<Collider>();
+        _audioSourse = GetComponent<AudioSource>();
         //personaje = GetComponent<Personaje>();
     }
 
@@ -24,18 +29,12 @@ public class PersonajeVida : VidaBase
         ActualizarBarraVida(Salud, saludMax);
     }
 
-    public void Update()
+    public override void RecibirDaño(float cantidad)
     {
-        /*if (Input.GetKeyDown(KeyCode.T))
-        {
-            RecibirDaño(10);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            RestaurarSalud(10);
-        }
-        */
+        base.RecibirDaño(cantidad);
+        _audioSourse.clip = audioRecibirDaño;
+        _audioSourse.volume = 0.7f;
+        _audioSourse.Play();
     }
 
     public void RestaurarSalud(float cantidad)

@@ -732,7 +732,7 @@ GameObject:
   - component: {fileID: 7688164240009432986}
   - component: {fileID: 6148762860026574314}
   m_Layer: 0
-  m_Name: Escudo - Collider
+  m_Name: Escudo
   m_TagString: Escudo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -750,7 +750,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0.692}
   m_LocalScale: {x: 1.0808719, y: 1.0808719, z: 1.0808719}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1734196072690524874}
   m_Father: {fileID: 8997908524709554227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7269549063927941157
@@ -842,6 +843,9 @@ MonoBehaviour:
   tiempoAntesDeRegenerar: 2
   factorRegeneracion: 10
   escudoMeshObj: {fileID: 7536826124929653128}
+  audioEscudoFull: {fileID: 0}
+  audioEscudoEmpty: {fileID: 0}
+  audioReboteFlecha: {fileID: 0}
 --- !u!1 &4422602368063387625
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,7 +883,6 @@ Transform:
   m_Children:
   - {fileID: 1637513694335255115}
   - {fileID: 5491452585096311151}
-  - {fileID: 1734196072690524874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7237932374037608765
@@ -1009,6 +1012,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  dashSpeed: 30
+  tiempoRegeneracionDash: 3
+  audioDesplazamientos: {fileID: 8300000, guid: d66a9c6e94153694aabaf85f4cd55b56, type: 3}
+  audioDash: {fileID: 8300000, guid: fa3229c103576b445a7f54adaa075bba, type: 3}
 --- !u!1 &7536826124929653128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,12 +1042,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7536826124929653128}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.6244319, y: 0.33164296, z: 0.3315272, w: 0.62464994}
-  m_LocalPosition: {x: 0.01, y: 0.292, z: 0.539}
-  m_LocalScale: {x: 69.063995, y: 69.06399, z: 78.88501}
+  m_LocalRotation: {x: -0.032502264, y: 0.7064824, z: 0.7062359, w: 0.032513615}
+  m_LocalPosition: {x: -0.12850042, y: 0.27015224, z: 0.06008605}
+  m_LocalScale: {x: 63.89655, y: 63.896534, z: 72.98275}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8997908524709554227}
+  m_Father: {fileID: 5491452585096311151}
   m_LocalEulerAnglesHint: {x: -89.98, y: 55.93, z: 0}
 --- !u!33 &8814138841533122248
 MeshFilter:

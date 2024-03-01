@@ -129,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         
-        audioSourse.volume = 0.2f;
+        audioSourse.volume = 0.5f;
         audioSourse.clip = audioDash;
         audioSourse.Play();
 

@@ -9,23 +9,33 @@ public class EscudoPlayer : MonoBehaviour
 {
     [SerializeField] Transform player;
     public Transform Player => player;
-
+    [Header("Estadisticas")]
     [SerializeField] float escudoMax = 100;
 
     [SerializeField] float tiempoAntesDeRegenerar = 1.5f;
     [SerializeField] float factorRegeneracion = 5; //Cuanto se cura x segundo
     
+    [Header("Otros")]
     [SerializeField] GameObject escudoMeshObj;
+
+    [Header("Sonidos")]
+    [SerializeField] private AudioClip audioEscudoFull;
+    [SerializeField] private AudioClip audioEscudoEmpty;
+    [SerializeField] private AudioClip audioReboteFlecha;
 
     private float escudoActual;
 
-    public bool PuedeDefender { get; private set; } = true;
+    public bool PuedeProtejer { get; private set; } = true;
 
     private bool puedeRegenerar = true;
     private string TiempoDeEventoKey = "UltimoGolpe";
+
+    private AudioSource audioSourse;
     
     private void Start() 
     {
+        audioSourse = GetComponent<AudioSource>();
+
         escudoActual = escudoMax;
         UIManager.Instance.ActualizarEscudoPersonaje(escudoActual, escudoMax);
         StartCoroutine(RegenerarEscudoPorSegundo());
@@ -37,9 +47,9 @@ public class EscudoPlayer : MonoBehaviour
         ComprobarSiPuedeRegenerar();
     }
 
-    public void Dañar(float cantidadDaño)
+    public void RecibirDaño(float cantidadDaño)
     {
-        if(!PuedeDefender)
+        if(!PuedeProtejer)
         {
             return;
         }
@@ -60,6 +70,17 @@ public class EscudoPlayer : MonoBehaviour
         if (escudoActual <= 0)
         {
             DesactivarProteccion();
+            // Reproducir sonido
+            audioSourse.clip = audioEscudoEmpty;
+            audioSourse.volume = 0.4f;
+            audioSourse.Play();
+        }
+        else
+        {
+            // Reproducir sonido
+            audioSourse.clip = audioReboteFlecha;
+            audioSourse.volume = 0.4f;
+            audioSourse.Play();
         }
     }
 
@@ -67,7 +88,7 @@ public class EscudoPlayer : MonoBehaviour
     {
         // Logica del escudo
         escudoActual = 0;
-        PuedeDefender = false;
+        PuedeProtejer = false;
         escudoMeshObj.SetActive(false);
         //Llamado a la UI
         UIManager.Instance.AgotarEscudo();
@@ -76,11 +97,15 @@ public class EscudoPlayer : MonoBehaviour
 
     private void ActivarProteccion()
     {
-        PuedeDefender = true;
+        PuedeProtejer = true;
         escudoActual = escudoMax;
         escudoMeshObj.SetActive(true);
         //Llamado a la UI
         UIManager.Instance.ActivarEscudo();
+        // Reproducir sonido
+        audioSourse.clip = audioEscudoFull;
+        audioSourse.volume = 0.6f;
+        audioSourse.Play();
     }
     
     private void ComprobarSiPuedeRegenerar()
@@ -109,7 +134,10 @@ public class EscudoPlayer : MonoBehaviour
             if (escudoActual >= escudoMax)
             {
                 escudoActual = escudoMax;
-                ActivarProteccion();
+                if (!PuedeProtejer)
+                {
+                    ActivarProteccion();
+                }
             }
         }
 

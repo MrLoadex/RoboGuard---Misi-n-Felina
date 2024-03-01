@@ -53,7 +53,7 @@ public class Arrow : MonoBehaviour
 
     private void DañarEscudo(EscudoPlayer escudo)
     {
-        escudo.Dañar(damage);
+        escudo.RecibirDaño(damage);
     }
 
     private void OnTriggerEnter(Collider other) 
@@ -61,7 +61,7 @@ public class Arrow : MonoBehaviour
         // Verificar si la flecha ha colisionado con un enemigo u otro objeto que pueda recibir daño
         if(other.gameObject.CompareTag("Escudo"))
         {
-            if (!other.GetComponent<EscudoPlayer>().PuedeDefender)
+            if (!other.GetComponent<EscudoPlayer>().PuedeProtejer)
             {
                 return;
             }

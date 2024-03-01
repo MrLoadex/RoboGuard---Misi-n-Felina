@@ -16,7 +16,7 @@ public class VidaBase : MonoBehaviour
         Salud = saludInicial;
     }
 
-    public void RecibirDaño(float cantidad)
+    public virtual void RecibirDaño(float cantidad)
     {
         if (cantidad < 0)
         {
