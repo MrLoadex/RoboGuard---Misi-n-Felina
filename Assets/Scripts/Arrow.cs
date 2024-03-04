@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    // Variables para la flecha
+    // Datos publicos
+    [Header("Congifuraciones")]
     public float velocidad = 10f;  // Velocidad de la flecha
     public Vector3 objetivo = Vector3.forward;  // Punto en el espacio al que apuntará la flecha
     public int damage = 10;  // Daño de la flecha
-
+    //Settings
     [SerializeField] private float tiempoMaximoDeVida = 3f;
+
+    //Audio
+    [Header("Audio")]
+    [SerializeField] private AudioClip audioDisparo;
 
     private bool playerInvulnerable;
     private bool yaReboto;
+    //Audio
+    private AudioSource audioSource;
 
     private void OnEnable() 
     {
+        EjecutarSonidaDisparo();
+        
         // Calcular la dirección hacia el objetivo
         Vector3 direccion = (objetivo - transform.position).normalized;
 
@@ -37,6 +46,13 @@ public class Arrow : MonoBehaviour
 
         // Llamar a la destruccion por tiempo
         StartCoroutine(DesactivarLuegoDeTiempoMaximo());
+    }
+
+    private void EjecutarSonidaDisparo()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 0.3f;
+        audioSource.clip = audioDisparo;
     }
 
     private void DañarEnemigo(VidaBase objetivo)
